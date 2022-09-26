@@ -5,14 +5,15 @@ local test = nil
 local test1 = nil
 local spam = true
 
- 
+local src = source
 
+local EMSOnline = 0
 
 RegisterCommand("help", function(source, args, raw)
 	if (QBCore.Functions.GetPlayerData().metadata["isdead"]) or (QBCore.Functions.GetPlayerData().metadata["inlaststand"]) and spam then
-		QBCore.Functions.TriggerCallback('hhfw:docOnline', function(EMSOnline, hasEnoughMoney)
+		QBCore.Functions.TriggerCallback('hhfw:docOnline', function(src, hasEnoughMoney)
 			if EMSOnline <= Config.Doctor and hasEnoughMoney and spam then
-				SpawnVehicle(GetEntityCoords(PlayerPedId()))
+				SpawnVehicle()
 				TriggerServerEvent('hhfw:charge')
 				Notify("Medic is arriving")
 			else
@@ -32,9 +33,11 @@ end)
 
 
 
-function SpawnVehicle(x, y, z)  
+function SpawnVehicle() 
+
 	spam = false
-	local vehhash = GetHashKey("ambulance")                                                     
+	local vehhash = GetHashKey("ambulance")
+	print(vehhash)                                                     
 	local loc = GetEntityCoords(PlayerPedId())
 	RequestModel(vehhash)
 	while not HasModelLoaded(vehhash) do
